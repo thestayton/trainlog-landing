@@ -1,14 +1,415 @@
 ---
-import Base from '../layouts/Base.astro';
-import { getEntry } from 'astro:content';
-
-// Reads content/home.md
-const entry = await getEntry('pages', 'home');
-const { Content } = await entry.render();
+const title = "TrainLog — Evidence-Based Strength & Longevity";
+const description = "A training protocol built on the science of Huberman, Norton, and Patrick. Maximize hypertrophy. Extend healthspan.";
 ---
 
-<Base>
-  <article class="prose">
-    <Content />
-  </article>
-</Base>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #070a07;
+      --bg1:     #0d120c;
+      --bg2:     #131a12;
+      --border:  #253022;
+      --green:   #62b83e;
+      --green-l: #8fdf68;
+      --green-d: #304e22;
+      --text:    #dff2d5;
+      --text-d:  #9bbf8a;
+      --text-dim:#607858;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(7,10,7,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800; font-size: 1.4rem;
+      color: var(--green); letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+    .nav-cta {
+      background: var(--green); color: #070a07;
+      padding: 0.5rem 1.25rem; border-radius: 6px;
+      font-weight: 600; font-size: 0.875rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--green-l); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start;
+      padding: 8rem 2rem 4rem;
+      max-width: 900px; margin: 0 auto;
+      position: relative;
+    }
+    .hero-eyebrow {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.875rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800; line-height: 1;
+      letter-spacing: -0.01em;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+    .hero p {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--text-d);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--green); color: #070a07;
+      padding: 0.875rem 2rem; border-radius: 6px;
+      font-weight: 700; font-size: 1rem;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover { background: var(--green-l); }
+    .btn-ghost {
+      border: 1px solid var(--border); color: var(--text-d);
+      padding: 0.875rem 2rem; border-radius: 6px;
+      font-size: 1rem; text-decoration: none;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--green); color: var(--green); }
+
+    .hero-badge {
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      margin-top: 4rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat { }
+    .hero-stat .num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem; font-weight: 700; color: var(--green);
+      line-height: 1;
+    }
+    .hero-stat .label {
+      font-size: 0.8rem; color: var(--text-dim);
+      text-transform: uppercase; letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+    }
+
+    /* SECTION BASE */
+    section { padding: 5rem 2rem; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 0.8rem; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--green); margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800; line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .section-sub {
+      color: var(--text-d); font-size: 1.05rem;
+      max-width: 580px; margin-bottom: 3rem; line-height: 1.7;
+    }
+
+    /* PILLARS */
+    .pillars { background: var(--bg1); }
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+    .pillar {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.75rem;
+      transition: border-color 0.2s;
+    }
+    .pillar:hover { border-color: var(--green-d); }
+    .pillar-icon {
+      font-size: 1.75rem; margin-bottom: 1rem;
+    }
+    .pillar h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 700; font-size: 1.25rem;
+      color: var(--text); margin-bottom: 0.5rem;
+    }
+    .pillar p {
+      font-size: 0.875rem; color: var(--text-dim);
+      line-height: 1.6;
+    }
+
+    /* SCIENCE */
+    .science-grid {
+      display: grid; gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+    .science-card {
+      border-left: 2px solid var(--green-d);
+      padding-left: 1.5rem;
+    }
+    .science-card .source {
+      font-size: 0.75rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--green); margin-bottom: 0.5rem;
+    }
+    .science-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.2rem; font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .science-card p {
+      font-size: 0.9rem; color: var(--text-d);
+      line-height: 1.65;
+    }
+
+    /* PROTOCOL */
+    .protocol { background: var(--bg1); }
+    .protocol-list { display: grid; gap: 1rem; }
+    .protocol-item {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 1rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      align-items: start;
+    }
+    .protocol-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.5rem; font-weight: 800;
+      color: var(--green); line-height: 1;
+    }
+    .protocol-item h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem; font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+    .protocol-item p {
+      font-size: 0.875rem; color: var(--text-d);
+      line-height: 1.6;
+    }
+
+    /* CTA */
+    .cta-section {
+      background: var(--bg2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .cta-section .section-title { margin-bottom: 1rem; }
+    .cta-section .section-sub { margin: 0 auto 2rem; text-align: center; }
+
+    /* FOOTER */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 1rem; }
+      .hero { padding: 6rem 1.25rem 3rem; }
+      section { padding: 3.5rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="nav-logo">TRAINLOG</a>
+    <a href="https://thestayton.github.io/Training/" class="nav-cta" target="_blank">Open App →</a>
+  </nav>
+
+  <!-- HERO -->
+  <div style="max-width:900px; margin:0 auto;">
+    <section class="hero" style="max-width:100%; padding-left:2rem; padding-right:2rem;">
+      <p class="hero-eyebrow">Evidence-Based · Hypertrophy · Longevity</p>
+      <h1>Train harder.<br /><em>Live longer.</em></h1>
+      <p>A training system built on decades of peer-reviewed research — from progressive overload to cellular senescence. Not influencer hype. Science you can load on a barbell.</p>
+      <div class="hero-actions">
+        <a href="https://thestayton.github.io/Training/" class="btn-primary" target="_blank">Start Logging</a>
+        <a href="#science" class="btn-ghost">The Science ↓</a>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-stat">
+          <div class="num">3–5×</div>
+          <div class="label">Weekly frequency</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">80%</div>
+          <div class="label">Of chronic disease preventable</div>
+        </div>
+        <div class="hero-stat">
+          <div class="num">10+</div>
+          <div class="label">Years added healthspan</div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- PILLARS -->
+  <section class="pillars">
+    <div class="container">
+      <p class="section-label">The System</p>
+      <h2 class="section-title">Four pillars. One protocol.</h2>
+      <p class="section-sub">Peak performance isn't one variable. It's the compound effect of training, recovery, nutrition, and metabolic health — each optimized and tracked.</p>
+      <div class="pillars-grid">
+        <div class="pillar">
+          <div class="pillar-icon">🏋️</div>
+          <h3>Strength</h3>
+          <p>Progressive overload with periodization. Compound lifts as the foundation. Tracked to the rep.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">❤️</div>
+          <h3>Cardiovascular</h3>
+          <p>Zone 2 for mitochondrial density. VO₂ max intervals for longevity. Structured, not random.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🧬</div>
+          <h3>Recovery</h3>
+          <p>Sleep architecture, HRV, circadian rhythm. The window where adaptation actually happens.</p>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🥩</div>
+          <h3>Nutrition</h3>
+          <p>Protein synthesis timing, leucine thresholds, and caloric periodization around training.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCIENCE -->
+  <section id="science">
+    <div class="container">
+      <p class="section-label">The Research</p>
+      <h2 class="section-title">Built on shoulders of giants.</h2>
+      <p class="section-sub">The protocols inside TrainLog synthesize work from the researchers redefining what peak human performance looks like.</p>
+      <div class="science-grid">
+        <div class="science-card">
+          <p class="source">Andrew Huberman · Huberman Lab</p>
+          <h3>Neuroendocrine Optimization</h3>
+          <p>Morning light exposure, cortisol timing, and dopamine management to maximize training motivation and recovery quality. Sleep architecture as a non-negotiable performance variable.</p>
+        </div>
+        <div class="science-card">
+          <p class="source">Dr. Layne Norton · BioLayne</p>
+          <h3>Evidence-Based Hypertrophy</h3>
+          <p>Mechanotensive overload, protein synthesis windows, and leucine thresholds. Norton's work strips the broscience from muscle building and replaces it with reproducible outcomes.</p>
+        </div>
+        <div class="science-card">
+          <p class="source">Dr. Rhonda Patrick · FoundMyFitness</p>
+          <h3>Cellular Longevity</h3>
+          <p>Heat stress, sauna-induced heat shock proteins, and the senolytic effects of intense exercise. Exercise as medicine at the cellular level — mTOR, AMPK, and mitochondrial biogenesis.</p>
+        </div>
+        <div class="science-card">
+          <p class="source">Dr. Peter Attia · The Drive</p>
+          <h3>Longevity Medicine</h3>
+          <p>VO₂ max as the single strongest predictor of all-cause mortality. Zone 2 training for metabolic flexibility. Muscle mass as the organ of longevity.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROTOCOL -->
+  <section class="protocol">
+    <div class="container">
+      <p class="section-label">Weekly Structure</p>
+      <h2 class="section-title">The weekly protocol.</h2>
+      <p class="section-sub">A repeatable training week designed for progressive overload while preserving recovery. Adaptable to 3, 4, or 5 days.</p>
+      <div class="protocol-list">
+        <div class="protocol-item">
+          <span class="protocol-num">01</span>
+          <div>
+            <h4>Upper Strength — Push Dominant</h4>
+            <p>Bench press, overhead press, weighted dips. 3–5 sets, 4–8 reps. Prioritize progressive overload on compound lifts each session.</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">02</span>
+          <div>
+            <h4>Lower Strength — Squat Dominant</h4>
+            <p>Back squat or front squat as primary. Leg press, Bulgarian split squat as accessories. Glutes and quads as primary movers.</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">03</span>
+          <div>
+            <h4>Zone 2 Cardio — 45–60 min</h4>
+            <p>Heart rate 60–70% max. Cycling, rowing, or incline walk. Mitochondrial density and metabolic flexibility as the targets.</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">04</span>
+          <div>
+            <h4>Upper Strength — Pull Dominant</h4>
+            <p>Weighted pull-ups, barbell rows, face pulls. Posterior chain and scapular health. Match push volume across the week.</p>
+          </div>
+        </div>
+        <div class="protocol-item">
+          <span class="protocol-num">05</span>
+          <div>
+            <h4>Lower Strength — Hip Hinge Dominant</h4>
+            <p>Deadlift or Romanian deadlift as primary. Hamstring and posterior chain focus. Single-leg work for imbalance correction.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label">Get Started</p>
+      <h2 class="section-title">Log your first session.</h2>
+      <p class="section-sub">TrainLog is a free, no-nonsense progressive overload tracker. No subscription. No bloat. Just you, the bar, and the data.</p>
+      <a href="https://thestayton.github.io/Training/" class="btn-primary" target="_blank">Open TrainLog →</a>
+    </div>
+  </section>
+
+  <footer>
+    <p>TrainLog — Built for people serious about the long game.</p>
+  </footer>
+
+</body>
+</html>
