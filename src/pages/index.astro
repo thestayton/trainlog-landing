@@ -1,0 +1,14 @@
+---
+import Base from '../layouts/Base.astro';
+import { getEntry } from 'astro:content';
+
+// Reads content/home.md
+const entry = await getEntry('pages', 'home');
+const { Content } = await entry.render();
+---
+
+<Base>
+  <article class="prose">
+    <Content />
+  </article>
+</Base>

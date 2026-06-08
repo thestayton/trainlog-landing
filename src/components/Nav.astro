@@ -1,0 +1,24 @@
+---
+import { site } from '../../site.config.js';
+const currentPath = Astro.url.pathname;
+---
+
+<nav style="border-bottom: 1px solid var(--color-border); padding: 1rem 1.5rem;">
+  <div style="max-width: var(--max-width); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+    <a href="/" style="font-weight: 700; font-size: 1.1rem; color: var(--color-text); text-decoration: none;">
+      {site.name}
+    </a>
+    <ul style="list-style: none; display: flex; gap: 1.5rem; padding: 0; margin: 0;">
+      {site.nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            style={`color: ${currentPath === item.href ? 'var(--color-accent)' : 'var(--color-text-muted)'}; font-size: 0.925rem;`}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</nav>

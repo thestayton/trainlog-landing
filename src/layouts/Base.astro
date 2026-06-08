@@ -1,0 +1,54 @@
+---
+import { theme } from '../../theme.config.js';
+import { site } from '../../site.config.js';
+import Nav from '../components/Nav.astro';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title, description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
+const pageDesc = description || site.description;
+
+// Build CSS custom properties from theme config
+const cssVars = `
+  --color-bg: ${theme.colorBg};
+  --color-surface: ${theme.colorSurface};
+  --color-border: ${theme.colorBorder};
+  --color-text: ${theme.colorText};
+  --color-text-muted: ${theme.colorTextMuted};
+  --color-accent: ${theme.colorAccent};
+  --color-accent-hover: ${theme.colorAccentHover};
+  --font-body: ${theme.fontBody};
+  --font-heading: ${theme.fontHeading};
+  --font-mono: ${theme.fontMono};
+  --font-size-base: ${theme.fontSizeBase};
+  --line-height: ${theme.lineHeight};
+  --max-width: ${theme.maxWidth};
+  --radius-card: ${theme.radiusCard};
+  --spacing-section: ${theme.spacingSection};
+`.trim();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDesc} />
+    <style set:html={`:root { ${cssVars} }`} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <Nav />
+    <main style="max-width: var(--max-width); margin: 0 auto; padding: 2rem 1.5rem var(--spacing-section);">
+      <slot />
+    </main>
+    <footer style="text-align: center; padding: 2rem; color: var(--color-text-muted); font-size: 0.875rem; border-top: 1px solid var(--color-border);">
+      {site.footer}
+    </footer>
+  </body>
+</html>
